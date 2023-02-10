@@ -102,12 +102,12 @@ exports.deleteStudents = async(req,res)=>{
 };
 exports.studentLogin = async(req,res) => {
     try{
-        const {email,password, role} = req.body
+        const {email} = req.body
         const check = await AddStudent.findOne({ email: email}); 
         if(!check) return res.status(404).json({message: "Not Found"});
-        const IsPassword = await bcryptjs.compare(password, check.password)
+        const IsPassword = await bcryptjs.compare(req.body.password, check.password)
         if(!IsPassword) return res.status(404).json({message: "Email or Password incorrect"});
-        if(!check.role == 2) return res.status(400).json({message: "You are not a student, you cannot login"});
+        if(!check.isStudent) return res.status(400).json({message: "You are not a student, you cannot login"});
 
         const myToken = jwt.sign({
             id: check._id,
@@ -117,10 +117,13 @@ exports.studentLogin = async(req,res) => {
 
         check.token = myToken
         await check.save();
+
+        console.log(check.isStuden)
+     const{password,...others} = check._doc
         
         res.status(201).json({
             message: "Successful",
-            data: check
+            data: others
         });
      }catch(e){
         res.status(404).json({

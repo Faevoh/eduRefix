@@ -39,7 +39,7 @@ const addStudent = new mongoose.Schema({
         type: String
     },
     isVerified: {
-        type: String,
+        type: Boolean,
         default: false
     },
     cloudId: {

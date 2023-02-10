@@ -42,7 +42,7 @@ const adminSchema = new mongoose.Schema({
         type: String
     },
     isVerified: {
-        type: String,
+        type: Boolean,
         default: false
     }
 },{

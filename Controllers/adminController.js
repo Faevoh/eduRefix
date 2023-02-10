@@ -34,7 +34,8 @@ exports.newAdmin = async(req,res)=>{
         await createNewUser.save();
 
         const userVerify = `${req.protocol}://${req.get("host")}/api/userVerify/${createNewUser._id}`;
-        const message = `Thank you for registering with our app. Please click this link ${userVerify} to verify your account`
+        const pageUrl = `${req.protocol}://${req.get("host")}/edu-global.onrender.com/#/verify/${createNewUser._id}`
+        const message = `Thank you for registering with our app. Please click this link ${pageUrl} to verify your account`
         emailSender({
             email: createNewUser.email,
             subject: "Kindly Verify your account",
@@ -79,10 +80,10 @@ exports.confirmVerify = async(req,res)=>{
 }    
 exports.adminLogin = async(req,res) => {
     try{
-        const {email,password} = req.body
+        const {email} = req.body
         const check = await AdminSchema.findOne({ email: email}); 
         if(!check) return res.status(404).json({message: "Not Found"});
-        const IsPassword = await bcryptjs.compare(password, check.password)
+        const IsPassword = await bcryptjs.compare(req.body.password, check.password)
         if(!IsPassword) return res.status(404).json({message: "Email or Password incorrect"});
 
         const myToken = jwt.sign({
@@ -94,10 +95,14 @@ exports.adminLogin = async(req,res) => {
         check.token = myToken
         await check.save();
         
-        res.status(201).json({
+     const{password,...others} = check._doc
+
+        res.status(200).json({
             message: "Successful",
-            data: check
+            data: others
         });
+    //  console.log(others)
+
      }catch(e){
         res.status(404).json({
             message: e.message
@@ -170,3 +175,54 @@ exports.adminLogOut = async(req,res)=>{
         });
     }
 };
+// exports.Forgotpassword = async (req, res) => {
+//     try{
+//         const {email} = req.body
+//         const userEmail = await Students.findOne({email})
+//         if(!userEmail) return  res.status(404).json({ message: "No Email" })
+//         const myToken = jwt.sign({
+//             id:userEmail._id,
+//             role:userEmail.role}, process.env.JWT_TOKEN, {expiresIn: "5m"})
+
+//         const VerifyLink = `${req.protocol}://${req.get("host")}/api/forgotPassword/${userEmail._id}/${myToken}`
+//         const message = `Use this link ${VerifyLink} to reset your password. 
+//         This link expires in 5 minutes`;
+//         emailSender({
+//           email: userEmail.email,
+//           subject: "Reset Pasword",
+//           message,
+//         })
+        
+//         res.status(202).json({
+//             message:"email have been sent"
+//         })
+
+//         // console.log(userEmail);
+//     }catch(err){
+//         res.status(400).json({
+//             message:err.message
+//         })
+//     }
+// };
+// exports.resetpassword = async (req, res) => {
+//     try {
+//         const {password} = req.body
+//         const id = req.params.id
+//         const passwordchange = await Students.findById(id)
+//         const salt = bcryptjs.genSaltSync(10);
+//         const hash = bcryptjs.hashSync(password, salt);
+
+//         await Students.findByIdAndUpdate(passwordchange._id,{
+//             password: hash
+//         },{new: true})
+
+//         res.status(202).json({
+//             message:"password updated"
+//         })
+
+//     } catch (err) {
+//         res.status(400).json({
+//             message:err.message
+//         })
+//     }
+// }
