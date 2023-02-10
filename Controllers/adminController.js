@@ -34,7 +34,7 @@ exports.newAdmin = async(req,res)=>{
         await createNewUser.save();
 
         const userVerify = `${req.protocol}://${req.get("host")}/api/userVerify/${createNewUser._id}`;
-        const pageUrl = `${req.protocol}://${req.get("host")}/edu-global.onrender.com/#/verify/${createNewUser._id}`
+        const pageUrl = `${req.protocol}://edu-global.onrender.com/#/verify/${createNewUser._id}`
         const message = `Thank you for registering with our app. Please click this link ${pageUrl} to verify your account`
         emailSender({
             email: createNewUser.email,
