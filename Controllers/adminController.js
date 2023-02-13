@@ -162,7 +162,7 @@ exports.adminLogOut = async(req,res)=>{
             id: Adminlogout._id,
             password: Adminlogout.password,
             isAdmin: Adminlogout.isAdmin
-        }, process.env.JWT_DESTROY,{ expiresIn: "5mins"});
+        }, process.env.JWT_DESTROY,{ expiresIn: "5sec"});
         Adminlogout.token = myToken;
         await Adminlogout.save();
         res.status(200).json({
@@ -180,6 +180,7 @@ exports.adminLogOut = async(req,res)=>{
 //         const {email} = req.body
 //         const userEmail = await Students.findOne({email})
 //         if(!userEmail) return  res.status(404).json({ message: "No Email" })
+
 //         const myToken = jwt.sign({
 //             id:userEmail._id,
 //             role:userEmail.role}, process.env.JWT_TOKEN, {expiresIn: "5m"})

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema
 
 const addStudent = new mongoose.Schema({
     studentName: {
@@ -19,7 +20,7 @@ const addStudent = new mongoose.Schema({
     regNumber: {
         type: String
     },
-    studentClass: {
+    nameOfClass: {
         type: String
     },
     admissionYear: {
@@ -30,6 +31,10 @@ const addStudent = new mongoose.Schema({
     },
     DOB: {
         type: String
+    },
+    classes:{
+        type: Schema.Types.ObjectId,
+        ref: "addClass"
     },
     isStudent: {
         type: Boolean,

@@ -1,4 +1,5 @@
 const AddStudent = require("../Models/addStudentModel");
+const classModel = require("../Models/classModel")
 const cloudinary = require("../Utils/cloudinary");
 const emailSender = require("../Utils/email");
 const bcryptjs = require("bcryptjs");
@@ -6,16 +7,17 @@ const jwt = require("jsonwebtoken")
 
 exports.newStudent = async(req,res)=>{
     try{
-        const {studentName,email, password,regNumber,studentClass,admissionYear, guardianPhoneNumber,DOB} = req.body;
+        const {studentName,email, password,regNumber,admissionYear, guardianPhoneNumber,DOB} = req.body;
         const salt = bcryptjs.genSaltSync(10);
         const hash = bcryptjs.hashSync(password, salt);
+        const classNew = req.params.classId;
+        const theClass = await classModel.findById(classNew)
 
         const data = {
             studentName,
             email,
             password: hash,
             regNumber,
-            studentClass,
             admissionYear,
             guardianPhoneNumber,
             DOB
@@ -24,15 +26,18 @@ exports.newStudent = async(req,res)=>{
         const userToken = jwt.sign({
             id: createNewUser._id,
             password: createNewUser.password,
-            role: createNewUser.role
+            // role: createNewUser.role
         }, process.env.JWT_TOKEN,{expiresIn: "1d"});
 
         createNewUser.token = userToken;
+        createNewUser.classes = theClass
         await createNewUser.save();
+        theClass.students.push(createNewUser);
+        await theClass.save()
 
-        const userVerify = `${req.protocol}://${req.get("host")}/api/verifyStudent/${createNewUser._id}`;
+        // const userVerify = `${req.protocol}://${req.get("host")}/api/verifyStudent/${createNewUser._id}`;
         const message = `You have been registered as New User in the Eduglobal Application.
-        Thank you for registering with our app. Please click this link ${userVerify} to verify your account`
+        Thank you for registering with our app.`
         emailSender({
             email: createNewUser.email,
             subject: "Kindly Verify your account",
@@ -41,7 +46,7 @@ exports.newStudent = async(req,res)=>{
 
         res.status(201).json({
             message: "New Student Added",
-            data: createNewUser
+            // data: createNewUser
         });
     }catch(e){
         res.status(400).json({
@@ -74,10 +79,24 @@ exports.confirmVerified = async(req,res)=>{
         message: e.message
        });
     }
-}    
+};    
 exports.getAllStudents = async(req,res)=>{
     try{
         const allStudents = await AddStudent.find();
+        res.status(201).json({
+            message: "All Students",
+            length: allStudents.length,
+            data: allStudents
+        });    
+    }catch(e){
+        res.status(400).json({
+            message: e.message
+        });
+    }
+};
+exports.AllStudentsperClass = async(req,res)=>{
+    try{
+        const allStudents = await AddStudent.find().populate("classes");
         res.status(201).json({
             message: "All Students",
             length: allStudents.length,

@@ -1,17 +1,23 @@
 const classModel = require("../Models/classModel");
+const AddStudent = require("../Models/addStudentModel");
+
 
 exports.newClass = async(req,res)=>{
     try {
-        const data = {nameOfClass,classBranch,monthlyTutionFees, selectClassTeacher} = req.body;
-        // const checkClassBranch = await classModel.findOne({classBranch});
-        // if(checkClassBranch) return res.status(404).json({message: "This ClassBranch has already been added to the class"});
-        // const checknameOfClass = await classModel.findOne({nameOfClass});
-        // if(checknameOfClass) return res.status(404).json({message: "This ClassBranch has already been added to the class"});
+        const data = {nameOfClass,classBranch,monthlyTutionFees, selectClassTeacher} = req.body
+        
+        // const studentId = req.params.id;
+        // const Student = await AddStudent.findById(studentId);
 
-        const createNew = await classModel.create(data)
+        const createNew = await classModel.create(data);
+        // createNew.students.push(Student);
+        createNew.save();
+        // Student.classes.push(createNew)
+        // await Student.save();
+
         res.status(201).json({
             message: 'New Class Created Sucessfully.',
-            data:createNew
+            // data:createNew
         })
         
     } catch (error) {
@@ -23,7 +29,7 @@ exports.newClass = async(req,res)=>{
 
 exports.allClass = async(req, res)=>{
     try{
-        const addedClass = await classModel.find();
+        const addedClass = await classModel.find().populate("addStudent");
             res.status(201).json({
                 classlength: addedClass.length,
                 message: "All CLASSES",
