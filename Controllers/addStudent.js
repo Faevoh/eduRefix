@@ -46,7 +46,7 @@ exports.newStudent = async(req,res)=>{
 
         res.status(201).json({
             message: "New Student Added",
-            // data: createNewUser
+            data: createNewUser
         });
     }catch(e){
         res.status(400).json({
