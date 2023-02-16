@@ -7,7 +7,7 @@ const subjectSchema = new mongoose.Schema({
     subjectName: {
         type: String
     },
-    subjectTeacher: {
+    subjectTeachers: {
         type: String
     }
 },

@@ -14,10 +14,10 @@ exports.newClass = async(req,res)=>{
         createNew.save();
         // Student.classes.push(createNew)
         // await Student.save();
-
+ 
         res.status(201).json({
             message: 'New Class Created Sucessfully.',
-            // data:createNew
+            data:createNew
         })
         
     } catch (error) {

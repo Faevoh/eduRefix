@@ -14,9 +14,6 @@ const addStudent = new mongoose.Schema({
         type: String,
         required: [true, "Password is required"]
     },
-    image: {
-        type: String
-    },
     regNumber: {
         type: String
     },
@@ -30,11 +27,18 @@ const addStudent = new mongoose.Schema({
         type: String
     },
     DOB: {
-        type: String
+        type: String 
     },
+    offeeredSubject: [{
+        type: String
+    }],
     classes:{
         type: Schema.Types.ObjectId,
         ref: "addClass"
+    },
+    attendance:{
+        type: Schema.Types.ObjectId,
+        ref: "studentAttendance"
     },
     isStudent: {
         type: Boolean,
@@ -46,9 +50,6 @@ const addStudent = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false
-    },
-    cloudId: {
-        type: String
     }
 },{
     timestamps: true

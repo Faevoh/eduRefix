@@ -155,6 +155,79 @@ exports.getAllAdmin = async(req,res)=>{
         });
     }
 };
+exports.Forgotpassword = async (req, res) => {
+    try{
+        const {email} = req.body
+        const adminEmail = await AdminSchema .findOne({email})
+        if(!adminEmail) return  res.status(404).json({ message: "No Email" })
+
+        const myToken = jwt.sign({
+            id:adminEmail._id,
+            isAdmin:adminEmail.isAdmin}, process.env.JWT_TOKEN, {expiresIn: "5m"})
+
+        const VerifyLink = `${req.protocol}://${req.get("host")}/api/forgotPassword/${adminEmail._id}/${myToken}`
+        const message = `Use this link ${VerifyLink} to reset your password. 
+        This link expires in 5 minutes`;
+        emailSender({
+          email: adminEmail.email,
+          subject: "Reset Pasword",
+          message,
+        })
+        
+        res.status(202).json({
+            message:"email have been sent"
+        })
+
+        // console.log(adminEmail);
+    }catch(err){
+        res.status(400).json({
+            message:err.message
+        })
+    }
+};
+exports.resetpassword = async (req, res) => {
+    try {
+        const {password} = req.body
+        const id = req.params.id
+        const passwordReset = await AdminSchema.findById(id)
+        const salt = bcryptjs.genSaltSync(10);
+        const hash = bcryptjs.hashSync(password, salt);
+
+        await AdminSchema.findByIdAndUpdate(passwordReset._id,{
+            password: hash
+        },{new: true})
+
+        res.status(202).json({
+            message:"Password has been reset"
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            message:err.message
+        })
+    }
+};
+exports.changePassword = async(req,res)=>{
+    try{
+        const {password} = req.body;
+        const adminId = req.params.adminId;
+        const adminPassword = await AdminSchema.findById(adminId)
+        const salt = bcryptjs.genSaltSync(10);
+        const hash = bcryptjs.hashSync(password, salt);
+        await AdminSchema.findByIdAndUpdate(adminPassword, {
+            password: hash
+        },{new: true})
+
+        res.status(202).json({
+            message:"Password has been changed"
+        })
+
+    }catch(e){
+        res.status(400).json({
+            message:e.message
+        }) 
+    }
+};
 exports.adminLogOut = async(req,res)=>{
     try{
         const Adminlogout = await AdminSchema.findById(req.params.adminId);
@@ -175,55 +248,3 @@ exports.adminLogOut = async(req,res)=>{
         });
     }
 };
-// exports.Forgotpassword = async (req, res) => {
-//     try{
-//         const {email} = req.body
-//         const userEmail = await Students.findOne({email})
-//         if(!userEmail) return  res.status(404).json({ message: "No Email" })
-
-//         const myToken = jwt.sign({
-//             id:userEmail._id,
-//             role:userEmail.role}, process.env.JWT_TOKEN, {expiresIn: "5m"})
-
-//         const VerifyLink = `${req.protocol}://${req.get("host")}/api/forgotPassword/${userEmail._id}/${myToken}`
-//         const message = `Use this link ${VerifyLink} to reset your password. 
-//         This link expires in 5 minutes`;
-//         emailSender({
-//           email: userEmail.email,
-//           subject: "Reset Pasword",
-//           message,
-//         })
-        
-//         res.status(202).json({
-//             message:"email have been sent"
-//         })
-
-//         // console.log(userEmail);
-//     }catch(err){
-//         res.status(400).json({
-//             message:err.message
-//         })
-//     }
-// };
-// exports.resetpassword = async (req, res) => {
-//     try {
-//         const {password} = req.body
-//         const id = req.params.id
-//         const passwordchange = await Students.findById(id)
-//         const salt = bcryptjs.genSaltSync(10);
-//         const hash = bcryptjs.hashSync(password, salt);
-
-//         await Students.findByIdAndUpdate(passwordchange._id,{
-//             password: hash
-//         },{new: true})
-
-//         res.status(202).json({
-//             message:"password updated"
-//         })
-
-//     } catch (err) {
-//         res.status(400).json({
-//             message:err.message
-//         })
-//     }
-// }

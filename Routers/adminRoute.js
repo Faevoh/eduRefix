@@ -1,5 +1,5 @@
 const express = require("express");
-const{newAdmin, confirmVerify,adminLogin, updateProfile, getAllAdmin, adminLogOut} = require("../Controllers/adminController");
+const{newAdmin, confirmVerify,adminLogin, updateProfile,adminLogOut, Forgotpassword, resetpassword, changePassword} = require("../Controllers/adminController");
 const{newClass,allClass, oneClass, updateClass, deleteClass} = require("../Controllers/addClass");
 const{addSubject,allSubject, oneSubject, updateSubject, deleteSubject} = require("../Controllers/addSubject");
 const {roleAuth} = require("../Utils/authorization");
@@ -13,8 +13,12 @@ Route.route("/admin/sign").post(newAdmin);
 Route.route("/userVerify/:id").post(confirmVerify);
 Route.route("/admin/login").post(adminLogin);
 Route.route("/admin/logout/:adminId").post(adminLogOut);
-Route.route("/admin/allAdmin").get(getAllAdmin);
+// Route.route("/admin/allAdmin").get(getAllAdmin);
 Route.route("/admin/updatedProfile/:userid").patch(multerImage,updateProfile);
+Route.route("/admin/forgetPassword").post(Forgotpassword);
+Route.route("/admin/resettPassword").post(resetpassword);
+Route.route("/admin/changePassword").patch(changePassword);
+
 
 // Route For Class with Admin authorization
 Route.route("/admin/newClass/:userId").post(roleAuth, newClass);

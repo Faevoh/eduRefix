@@ -12,10 +12,10 @@ const classSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    selectClassTeacher: {
-        type: String,
-        required: true
-    },
+    teachers: [{
+        type: Schema.Types.ObjectId,
+        ref: "addTeacher"
+    }],
     students:[{
         type: Schema.Types.ObjectId,
         ref: "addStudents"

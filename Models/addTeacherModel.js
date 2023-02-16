@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const addTeacher = new mongoose.Schema({
     teacherName: {
@@ -15,9 +16,6 @@ const addTeacher = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "Password is required"]
-    },
-    image: {
-        type: String
     },
     homeAddress: {
         type: String
@@ -44,12 +42,19 @@ const addTeacher = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    subjectToTeach:[{
+        type:String
+    }],
+    classes:{
+        type: Schema.Types.ObjectId,
+        ref: "addClass"
+    },
     token: {
         type: String
     },
     isVerified: {
         type: Boolean,
-        default: false
+        default: true
     }
 },{
     timestamps: true
