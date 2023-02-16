@@ -5,6 +5,8 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload")
 
 const admin = require("./Routers/adminRoute");
+const student = require("./Routers/studentRoute");
+const teacher = require("./Routers/teacherRoute")
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(express.static("./adminLogo"))
 
 
 app.use("/api",admin);
+app.use("/api", student);
+app.use("/api", teacher)
 
 app.use("/uploaded-image", express.static(process.cwd() + "/adminLogo"));
 
