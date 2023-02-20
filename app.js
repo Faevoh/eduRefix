@@ -24,7 +24,7 @@ app.use("/api", student);
 app.use("/api", teacher)
 
 app.get("/", (req,res)=>{
-    res.send("Welcome Message to Our Api")
+    res.send("Welcome Message to Edu Global")
 });
 
 app.use("/uploaded-image", express.static(process.cwd() + "/uploads"));
