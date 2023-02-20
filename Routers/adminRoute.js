@@ -33,7 +33,7 @@ Route.route("/admin/allStudentsPerClass/:userid").get(roleAuth, AllStudentsperCl
 Route.route("/admin/deleteStudent/:userid/:studentid").delete(roleAuth,deleteStudents);
 
 // Route For Class with Admin authorization
-Route.route("/admin/newClass/:userid").post(roleAuth,newClass);  //problems with authorization
+Route.route("/admin/newClass").post(newClass);  //checked
 Route.route("/admin/allClass/:userid").get(roleAuth, allClass); //checked
 Route.route("/admin/oneClass/:userid/:classId").get(roleAuth, oneClass); //checked
 Route.route("/admin/updateClass/:userid/:classId").patch(roleAuth, updateClass);
