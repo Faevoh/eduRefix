@@ -84,31 +84,6 @@ exports.studentLogin = async(req,res) => {
         });
     }
 };
-// exports.confirmVerified = async(req,res)=>{
-//     try{
-//         const id = req.params.studentid;
-        
-//         const user = await AddStudent.findById(id)
-       
-//         await AddStudent.findByIdAndUpdate(
-//             user._id,
-//             {
-//                 isVerified : true
-//             },
-//             {
-//                 new: true
-//             }
-//         )
-
-//         res.status(201).json({
-//             message: "You have been verified"
-//         });
-//     }catch(e){
-//         res.status(400).json({
-//         message: e.message
-//        });
-//     }
-// };    
 exports.getAllStudents = async(req,res)=>{
     try{
         const allStudents = await AddStudent.find();
@@ -142,6 +117,15 @@ exports.deleteStudents = async(req,res)=>{
         const studentid = req.params.studentid
         await AddStudent.findByIdAndDelete(studentid);
         res.send  ("Successfully Deleted")
+    }catch(e){
+        res.status(404).json({
+            message: e.message
+        });
+    }
+};
+exports.updateStudent = async(req,res)=>{
+    try{
+        
     }catch(e){
         res.status(404).json({
             message: e.message

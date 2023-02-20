@@ -10,7 +10,6 @@ const classSchema = new mongoose.Schema({
     },
     monthlyTutionFees: {
         type: String,
-        required: true
     },
     teachers: [{
         type: Schema.Types.ObjectId,
@@ -18,7 +17,7 @@ const classSchema = new mongoose.Schema({
     }],
     students:[{
         type: Schema.Types.ObjectId,
-        ref: "addStudents"
+        ref: "addStudent"
     }]
 },{
     timestamps: true

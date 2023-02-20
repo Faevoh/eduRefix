@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 
 exports.newTeacher = async(req,res)=>{
     try{
-        const {teacherName,gender,email, password,homeAddress,phoneNumber, joiningDate,educationLevel,DOB,experience,salary,classes} = req.body;
+        const {teacherName,gender,email, password,homeAddress,phoneNumber, joiningDate,educationLevel,DOB,experience,salary} = req.body;
         const salt = bcryptjs.genSaltSync(10);
         const hash = bcryptjs.hashSync(password, salt);
         const classNew = req.params.classId;
@@ -23,8 +23,7 @@ exports.newTeacher = async(req,res)=>{
             educationLevel,
             DOB,
             experience,
-            salary,
-            classes
+            salary
         }
         const createNewUser = new AddTeacher(data);
         const userToken = jwt.sign({

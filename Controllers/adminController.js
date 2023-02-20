@@ -1,6 +1,7 @@
 const AdminSchema = require("../Models/adminModel");
 const emailSender = require("../Utils/email");
 const cloudinary = require("../Utils/cloudinary");
+const path = require("path");
 const fs = require("fs");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -111,34 +112,52 @@ exports.adminLogin = async(req,res) => {
 };
 exports.updateProfile = async(req,res)=>{
     try{
-        const id = req.params.userid;
-        const userId = await AdminSchema.findById(id);
+        // updated update
+        const id = req.params.adminid;
+        const admin = await AdminSchema.findById(id);
         // console.log(userId)
-
-        const {nameOfSchool,phoneNumber,address,targetLine,website,country,schoolImage} = req.body;
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const data ={
-         nameOfSchool,
-         phoneNumber,
-         address,
-         targetLine,
-         website,
-         country,
-         schoolImage: result.secure_url,
-         cloudId: result.public_id
-       }
-       
-        const updatedProfile = await AdminSchema.findByIdAndUpdate(userId, data)
+        // await cloudinary.uploader.destroy( AdminSchema.cloudId )
+        // await fs.unlinkSync( AdminSchema.schoolImage )
         
-        res.status(201).json({
+        const updateAdmin= await cloudinary.uploader.upload(
+         req.files.schoolImage.tempFilePath,{folder:"schoolImage"},
+         (err, schoolImage) => {
+           try {
+             return schoolImage;
+           } catch (err) {
+             return err;
+           }
+         }
+       );
+        // await cloudinary.uploader.upload( admin )
+        const {nameOfSchool,phoneNumber,email,password,address,targetLine,website,country} = req.body;
+        const salt = bcryptjs.genSaltSync(10);
+        const hash = bcryptjs.hashSync(password, salt);
+
+        const data = {
+            nameOfSchool,
+            phoneNumber,
+            email,
+            password: hash,
+            address,
+            targetLine,
+            website,
+            country,
+            schoolImage:  {
+                    public_id:updateAdmin.public_id,
+                    url:updateAdmin.secure_url
+                }
+           }
+        const updatedAdmin = await AdminSchema.findByIdAndUpdate(id, data, {new: true});
+        res.status( 200 ).json( {
             message: "Successfully Updated Profile",
-            data: updatedProfile
-        });
+            data: updatedAdmin
+        })
         
     }catch(e){
         res.status(404).json({
             message: e.message
-        });
+        })
     }
 };
 exports.getAllAdmin = async(req,res)=>{
@@ -188,7 +207,7 @@ exports.Forgotpassword = async (req, res) => {
 exports.resetpassword = async (req, res) => {
     try {
         const {password} = req.body
-        const id = req.params.id
+        const id = req.params.Resetid
         const passwordReset = await AdminSchema.findById(id)
         const salt = bcryptjs.genSaltSync(10);
         const hash = bcryptjs.hashSync(password, salt);

@@ -42,9 +42,9 @@ const addTeacher = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    subjectToTeach:[{
+    subjectToTeach:{
         type:String
-    }],
+    },
     classes:{
         type: Schema.Types.ObjectId,
         ref: "addClass"

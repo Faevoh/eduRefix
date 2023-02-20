@@ -1,17 +1,20 @@
 const classModel = require("../Models/classModel");
 const AddStudent = require("../Models/addStudentModel");
+const AddTeacher = require("../Models/addTeacherModel");
+
 
 
 exports.newClass = async(req,res)=>{
     try {
-        const data = {nameOfClass,classBranch,monthlyTutionFees, selectClassTeacher} = req.body
+        const data = {nameOfClass,classBranch,monthlyTutionFees} = req.body
         
         // const studentId = req.params.id;
         // const Student = await AddStudent.findById(studentId);
 
         const createNew = await classModel.create(data);
+        console.log(createNew)
         // createNew.students.push(Student);
-        createNew.save();
+        // createNew.save();
         // Student.classes.push(createNew)
         // await Student.save();
  
@@ -19,17 +22,18 @@ exports.newClass = async(req,res)=>{
             message: 'New Class Created Sucessfully.',
             data:createNew
         })
-        
-    } catch (error) {
+    } catch (e) {
         res.status(401).json({
-            message: error.message
+            message: e.message
         })
     }
 }
 
 exports.allClass = async(req, res)=>{
     try{
-        const addedClass = await classModel.find().populate("addStudent");
+        // const addedClass = await classModel.find().populate("addStudent","addTeacher");
+        const addedClass = await classModel.find().populate("students")
+
             res.status(201).json({
                 classlength: addedClass.length,
                 message: "All CLASSES",

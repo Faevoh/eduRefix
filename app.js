@@ -12,18 +12,21 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("./uploads"))
 
-app.use(express.static("./adminLogo"))
+app.use(fileUpload({ 
+    useTempFiles: true
+}))
 
 
 app.use("/api",admin);
 app.use("/api", student);
 app.use("/api", teacher)
 
-app.use("/uploaded-image", express.static(process.cwd() + "/adminLogo"));
-
 app.get("/", (req,res)=>{
     res.send("Welcome Message to Our Api")
 });
+
+app.use("/uploaded-image", express.static(process.cwd() + "/uploads"));
 
 module.exports = app

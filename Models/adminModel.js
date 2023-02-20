@@ -16,11 +16,13 @@ const adminSchema = new mongoose.Schema({
     phoneNumber: {
         type: String
     },
-    schoolImage: {
-        type: String
-    },
-    cloudId: {
-        type: String
+    schoolImage:{
+        public_id: {
+            type: String,
+        },
+        url:{ 
+            type: String,
+        }
     },
     address: {
         type: String

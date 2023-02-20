@@ -1,12 +1,12 @@
 const express = require("express");
-const{newStudent,getAllStudents, deleteStudents,confirmVerified,studentLogin,AllStudentsperClass} = require("../Controllers/addStudent");
-const {roleAuth} = require("../Utils/authorization");
+const{studentLogin} = require("../Controllers/addStudent");
+
 
 
 const Route = express.Router();
 
 // Route For  Student 
-Route.route("/student/login").post(studentLogin);
+Route.route("/student/login").post(studentLogin);  //checked
 
 
 module.exports = Route
