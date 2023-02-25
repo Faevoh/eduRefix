@@ -1,12 +1,14 @@
 const AddTeacher = require("../Models/addTeacherModel");
 const classModel = require("../Models/classModel");
+const teacherAttModel = require("../Models/teacherAttendanceModel")
+const studentAttModel = require("../Models/studentAttendanceModel")
 const emailSender = require("../Utils/email");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken")
 
 exports.newTeacher = async(req,res)=>{
     try{
-        const {teacherName,gender,email, password,homeAddress,phoneNumber, joiningDate,educationLevel,DOB,experience,salary} = req.body;
+        const {teacherName,gender,email, password,homeAddress,phoneNumber, joiningDate,educationLevel,DOB,experience,salary,subjectToTeach} = req.body;
         const salt = bcryptjs.genSaltSync(10);
         const hash = bcryptjs.hashSync(password, salt);
         const classNew = req.params.classId;
@@ -23,7 +25,8 @@ exports.newTeacher = async(req,res)=>{
             educationLevel,
             DOB,
             experience,
-            salary
+            salary,
+            subjectToTeach
         }
         const createNewUser = new AddTeacher(data);
         const userToken = jwt.sign({
@@ -33,9 +36,9 @@ exports.newTeacher = async(req,res)=>{
         }, process.env.JWT_TOKEN,{expiresIn: "1d"});
 
         createNewUser.token = userToken;
-        createNewUser.classes = theClass
+        createNewUser.teacherclass = theClass
         await createNewUser.save();
-        theClass.students.push(createNewUser);
+        theClass.teachers.push(createNewUser);
         await theClass.save()
 
         // const userVerify = `${req.protocol}://${req.get("host")}/api/verifyStudent/${createNewUser._id}`;
@@ -48,7 +51,7 @@ exports.newTeacher = async(req,res)=>{
         });
 
         res.status(201).json({
-            message: "New Student Added",
+            message: "New Teacher Added",
             data: createNewUser
         });
     }catch(e){
@@ -92,7 +95,7 @@ exports.getAllTeachers = async(req,res)=>{
     try{
         const allTeacher = await AddTeacher.find();
         res.status(201).json({
-            message: "All Students",
+            message: "All Teacher",
             length: allTeacher.length,
             data: allTeacher
         });    
@@ -104,9 +107,9 @@ exports.getAllTeachers = async(req,res)=>{
 };
 exports.AllTeachersperClass = async(req,res)=>{
     try{
-        const allTeacher = await AddTeacher.find().populate("classes");
+        const allTeacher = await AddTeacher.find().populate("teacherclass");
         res.status(201).json({
-            message: "All Students",
+            message: "All Teacher in ",
             length: allTeacher.length,
             data: allTeacher
         });    
@@ -118,16 +121,19 @@ exports.AllTeachersperClass = async(req,res)=>{
 };
 exports.deleteTeacher = async(req,res)=>{
     try{
+        const classNew = req.params.classId;
         const teacherid = req.params.teacherid
         await AddTeacher.findByIdAndDelete(teacherid);
-        res.send  ("Successfully Deleted")
+        const theClass = await classModel.findById(classNew);
+        await theClass.teachers.pull(teacherid)
+
+        res.status(200).json({ message: "Teacher Successfully Deleted"})
     }catch(e){
         res.status(404).json({
             message: e.message
         });
     }
 };
-
 exports.Forgotpassword = async (req, res) => {
     try{
         const {email} = req.body
@@ -136,10 +142,11 @@ exports.Forgotpassword = async (req, res) => {
 
         const myToken = jwt.sign({
             id:teacherEmail._id,
-            isAdmin:teacherEmail.isAdmin}, process.env.JWT_TOKEN, {expiresIn: "5m"})
+            isTeacher:teacherEmail.isTeacher}, process.env.JWT_TOKEN, {expiresIn: "5m"})
 
         const VerifyLink = `${req.protocol}://${req.get("host")}/api/forgotPassword/${teacherEmail._id}/${myToken}`
-        const message = `Use this link ${VerifyLink} to reset your password. 
+        const pageUrl = `${req.protocol}://edu-global-application.onrender.com/#/resetpassword/${teacherEmail._id}/${myToken}`
+        const message = `Use this link ${pageUrl} to reset your password. 
         This link expires in 5 minutes`;
         emailSender({
           email: teacherEmail.email,
@@ -203,11 +210,11 @@ exports.changePassword = async(req,res)=>{
 };
 exports.teacherLogOut = async(req,res)=>{
     try{
-        const Teacherlogout = await AddTeacher.findById(req.params.adminId);
+        const Teacherlogout = await AddTeacher.findById(req.params.teacherId);
         const myToken = jwt.sign({
             id: Teacherlogout._id,
             password: Teacherlogout.password,
-            isAdmin: Teacherlogout.isAdmin
+            isTeacher: Teacherlogout.isTeacher
         }, process.env.JWT_DESTROY,{ expiresIn: "5sec"});
         Teacherlogout.token = myToken;
         await Teacherlogout.save();
@@ -217,6 +224,23 @@ exports.teacherLogOut = async(req,res)=>{
 
     }catch(e){
         res.status(400).json({
+            message: e.message
+        });
+    }
+};
+exports.updateTeacher = async(req,res)=>{
+    try{
+        const teacherId = req.params.teacherId;
+        const teachers = await AddTeacher.findById(teacherId);
+        const data = req.body;
+        const updateTeacher = await AddTeacher.findByIdAndUpdate(teachers,data,{new: true});
+
+        res.status(200).json({
+            status: "Successfull",
+            data: updateTeacher
+        });
+    }catch(e){
+        res.status(404).json({
             message: e.message
         });
     }

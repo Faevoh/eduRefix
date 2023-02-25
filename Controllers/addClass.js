@@ -32,7 +32,7 @@ exports.newClass = async(req,res)=>{
 exports.allClass = async(req, res)=>{
     try{
         // const addedClass = await classModel.find().populate("addStudent","addTeacher");
-        const addedClass = await classModel.find().populate("students")
+        const addedClass = await classModel.find().populate("students","teachers")
 
             res.status(201).json({
                 classlength: addedClass.length,
@@ -68,8 +68,10 @@ exports.oneClass = async(req, res)=>{
 }
 exports.updateClass = async (req,res)=>{
     try{
-        const id = req.params.classId;
-        const updatedClass = await classModel.findByIdAndUpdate(id, req.body)
+        const classId = req.params.classId;
+        // const classes = await classModel.findById(classId);
+        const data = req.body
+        const updatedClass = await classModel.findByIdAndUpdate(classId,data,{new: true})
         if(!updatedClass ){
             res.status(404).json({
                 message: `User doesnt exist`

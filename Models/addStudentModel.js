@@ -17,9 +17,9 @@ const addStudent = new mongoose.Schema({
     regNumber: {
         type: String
     },
-    nameOfClass: {
-        type: String
-    },
+    // nameOfClass: {
+    //     type: String
+    // },
     admissionYear: {
         type: String
     },
@@ -29,9 +29,9 @@ const addStudent = new mongoose.Schema({
     DOB: {
         type: String 
     },
-    offeeredSubject: [{
+    offeredSubject: {
         type: String
-    }],
+    },
     classes:{
         type: Schema.Types.ObjectId,
         ref: "addClass"
@@ -39,6 +39,14 @@ const addStudent = new mongoose.Schema({
     attendance:{
         type: Schema.Types.ObjectId,
         ref: "studentAttendance"
+    },
+    timetable:{
+        type: Schema.Types.ObjectId,
+        ref: "StudenttimeTable"
+    },
+    result: {
+        type: Schema.Types.ObjectId,
+        ref: "Results"
     },
     isStudent: {
         type: Boolean,

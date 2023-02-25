@@ -53,7 +53,6 @@ exports.newAdmin = async(req,res)=>{
         });
     }
 };
-
 exports.confirmVerify = async(req,res)=>{
     try{
         const id = req.params.id;
@@ -185,7 +184,8 @@ exports.Forgotpassword = async (req, res) => {
             isAdmin:adminEmail.isAdmin}, process.env.JWT_TOKEN, {expiresIn: "5m"})
 
         const VerifyLink = `${req.protocol}://${req.get("host")}/api/forgotPassword/${adminEmail._id}/${myToken}`
-        const message = `Use this link ${VerifyLink} to reset your password. 
+        const pageUrl = `${req.protocol}://edu-global-application.onrender.com/#/resetpassword/${adminEmail._id}/${myToken}`
+        const message = `Use this link ${pageUrl} to reset your password. 
         This link expires in 5 minutes`;
         emailSender({
           email: adminEmail.email,

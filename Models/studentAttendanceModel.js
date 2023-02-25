@@ -24,3 +24,8 @@ const studentAttendanceSchema = new mongoose.Schema({
         required: true
     }
 });
+
+
+const studentAttendance = mongoose.model("studentAttendance", studentAttendanceSchema)
+
+module.exports = studentAttendance

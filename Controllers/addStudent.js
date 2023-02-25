@@ -100,7 +100,9 @@ exports.getAllStudents = async(req,res)=>{
 };
 exports.AllStudentsperClass = async(req,res)=>{
     try{
-        const allStudents = await AddStudent.find().populate("classes");
+        const classNew = req.params.classId;
+        const theClass = await classModel.findById(classNew)
+        const allStudents = await AddStudent.findOne({theClass}).populate("classes");
         res.status(201).json({
             message: "All Students",
             length: allStudents.length,
@@ -114,9 +116,14 @@ exports.AllStudentsperClass = async(req,res)=>{
 };
 exports.deleteStudents = async(req,res)=>{
     try{
+        const classNew = req.params.classId;
         const studentid = req.params.studentid
         await AddStudent.findByIdAndDelete(studentid);
-        res.send  ("Successfully Deleted")
+        const theClass = await classModel.findById(classNew);
+        await theClass.students.pull(studentid)
+
+        res.status(200).json({ message: "Student Successfully Deleted"})
+        
     }catch(e){
         res.status(404).json({
             message: e.message
@@ -125,10 +132,112 @@ exports.deleteStudents = async(req,res)=>{
 };
 exports.updateStudent = async(req,res)=>{
     try{
-        
+        const studentId = req.params.studentId;
+        const students = await AddStudent.findById(studentId);
+        const data = req.body;
+        const updateStudent = await AddStudent.findByIdAndUpdate(students,data,{new: true});
+
+        res.status(200).json({
+            status: "Successfull",
+            data: updateStudent
+        });
     }catch(e){
         res.status(404).json({
             message: e.message
         });
+    }
+};
+exports.studentLogOut = async(req,res)=>{
+    try{
+        const Studentlogout = await AddStudent.findById(req.params.studentId);
+        const myToken = jwt.sign({
+            id: Studentlogout._id,
+            password: Studentlogout.password,
+            isStudent: Studentlogout.isStudent
+        }, process.env.JWT_DESTROY,{ expiresIn: "5sec"});
+        Studentlogout.token = myToken;
+        await Studentlogout.save();
+        res.status(200).json({
+            message: "Successfully Logged Out"
+        });
+
+    }catch(e){
+        res.status(400).json({
+            message: e.message
+        });
+    }
+};
+exports.Forgotpassword = async (req, res) => {
+    try{
+        const {email} = req.body
+        const studentEmail = await AddStudent .findOne({email})
+        if(!studentEmail) return  res.status(404).json({ message: "No Email" })
+
+        const myToken = jwt.sign({
+            id:studentEmail._id,
+            isStudent:studentEmail.isStudent}, process.env.JWT_TOKEN, {expiresIn: "5m"})
+
+        const VerifyLink = `${req.protocol}://${req.get("host")}/api/forgotPassword/${studentEmail._id}/${myToken}`
+        const pageUrl = `${req.protocol}://edu-global-application.onrender.com/#/resetpassword/${studentEmail._id}/${myToken}`
+        const message = `Use this link ${pageUrl} to reset your password. 
+        This link expires in 5 minutes`;
+        emailSender({
+          email: studentEmail.email,
+          subject: "Reset Pasword",
+          message,
+        })
+        
+        res.status(202).json({
+            message:"email have been sent"
+        })
+
+        // console.log(studentEmail);
+    }catch(err){
+        res.status(400).json({
+            message:err.message
+        })
+    }
+};
+exports.resetpassword = async (req, res) => {
+    try {
+        const {password} = req.body
+        const studentId = req.params.studentId
+        const passwordReset = await AddStudent.findById(studentId)
+        const salt = bcryptjs.genSaltSync(10);
+        const hash = bcryptjs.hashSync(password, salt);
+        // console.log(passwordReset)
+
+        await AddStudent.findByIdAndUpdate(passwordReset._id,{
+            password: hash
+        },{new: true})
+
+        res.status(202).json({
+            message:"Password has been reset"
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            message:err.message
+        })
+    }
+};
+exports.changePassword = async(req,res)=>{
+    try{
+        const {password} = req.body;
+        const studentId = req.params.studentId;
+        const teacherPassword = await AddStudent.findById(studentId)
+        const salt = bcryptjs.genSaltSync(10);
+        const hash = bcryptjs.hashSync(password, salt);
+        await AddStudent.findByIdAndUpdate(teacherPassword, {
+            password: hash
+        },{new: true})
+
+        res.status(202).json({
+            message:"Password has been changed"
+        });
+    }catch(e){
+        res.status(400).json({
+            message:e.message
+        }) 
     }
 };

@@ -1,5 +1,5 @@
 const express = require("express");
-const{studentLogin} = require("../Controllers/addStudent");
+const{studentLogin,studentLogOut,Forgotpassword,resetpassword,changePassword} = require("../Controllers/addStudent");
 
 
 
@@ -7,6 +7,11 @@ const Route = express.Router();
 
 // Route For  Student 
 Route.route("/student/login").post(studentLogin);  //checked
+Route.route("/student/logout/:studentId").post(studentLogOut); //checked
+Route.route("/student/forgotPassword").post(Forgotpassword); //checked
+Route.route("/student/resetPassword/:studentId").post(resetpassword);  //checked
+Route.route("/student/changePassword/:studentId").patch(changePassword); //checked
+
 
 
 module.exports = Route

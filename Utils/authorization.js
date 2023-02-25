@@ -7,7 +7,7 @@ dotenv.config({path: "./config/config.env"});
 const isSignIn = async (req,res,next)=>{
     const userid = req.params.userid
     const user = await adminModel.findById(userid)
-    console.log (user._id)
+    // console.log (user._id)
     // console.log (user.token)
     if(!user) return res.status(404).json({message: "you are not admin"});
 
@@ -16,7 +16,7 @@ const isSignIn = async (req,res,next)=>{
     if(!Token) return res.status(403).json({message: "you are not authenticated"});
     
     jwt.verify(Token, process.env.JWT_TOKEN, (err, payload)=>{
-        if(err) return res.status(403).json({message: "token is not valid!"});
+        if(err) return res.status(403).json({message: "token is not valid!", message2: err.message});
 
         req.user = payload
         next()
