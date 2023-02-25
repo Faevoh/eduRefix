@@ -225,10 +225,10 @@ exports.changePassword = async(req,res)=>{
     try{
         const {password} = req.body;
         const studentId = req.params.studentId;
-        const teacherPassword = await AddStudent.findById(studentId)
+        const NewPassword = await AddStudent.findById(studentId)
         const salt = bcryptjs.genSaltSync(10);
         const hash = bcryptjs.hashSync(password, salt);
-        await AddStudent.findByIdAndUpdate(teacherPassword, {
+        await AddStudent.findByIdAndUpdate(NewPassword, {
             password: hash
         },{new: true})
 

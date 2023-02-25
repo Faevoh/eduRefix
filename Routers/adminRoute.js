@@ -2,7 +2,7 @@ const express = require("express");
 const{newAdmin, confirmVerify,adminLogin, updateProfile,adminLogOut, getAllAdmin,Forgotpassword, resetpassword, changePassword} = require("../Controllers/adminController");
 const{newStudent,getAllStudents, deleteStudents,AllStudentsperClass, updateStudent} = require("../Controllers/addStudent");
 const{newClass,allClass, oneClass, updateClass, deleteClass} = require("../Controllers/addClass");
-const {newTeacher,getAllTeachers,AllTeachersperClass,deleteTeacher} = require("../Controllers/addTeacher")
+const {newTeacher,getAllTeachers,AllTeachersperClass,deleteTeacher,updateTeacher} = require("../Controllers/addTeacher")
 const {roleAuth} = require("../Utils/authorization");
 // const Image = require("../Utils/multer");
 
@@ -31,6 +31,7 @@ Route.route("/admin/deleteStudent/:studentid/:classId").delete(deleteStudents); 
 Route.route("/newTeacher/:classId").post(newTeacher); //checked
 Route.route("/admin/allTeacher/:userid").get(roleAuth,getAllTeachers); //checked
 Route.route("/admin/allTeachersPerClass/:userid/:classId").get(roleAuth,AllTeachersperClass); //checked
+Route.route("/teacher/:userid/:teacherId").patch(roleAuth,updateTeacher); //checked
 Route.route("/admin/deleteStudent/:userid/:studentid").delete(roleAuth,deleteTeacher);
 
 // Route For Class with Admin authorization

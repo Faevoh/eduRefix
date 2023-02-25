@@ -129,15 +129,11 @@ exports.updateProfile = async(req,res)=>{
          }
        );
         // await cloudinary.uploader.upload( admin )
-        const {nameOfSchool,phoneNumber,email,password,address,targetLine,website,country} = req.body;
-        const salt = bcryptjs.genSaltSync(10);
-        const hash = bcryptjs.hashSync(password, salt);
+        const {nameOfSchool,phoneNumber,address,targetLine,website,country} = req.body;
 
         const data = {
             nameOfSchool,
             phoneNumber,
-            email,
-            password: hash,
             address,
             targetLine,
             website,
