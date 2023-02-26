@@ -54,8 +54,12 @@ const addTeacher = new mongoose.Schema({
         ref: "addClass"
     },
     timetable:{
-        type: Schema.Types.ObjectId,
-        ref: "TeachertimeTable"
+        public_id: {
+            type: String,
+        },
+        url:{ 
+            type: String,
+        }
     },
     token: {
         type: String
