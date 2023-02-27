@@ -32,10 +32,10 @@ const addStudent = new mongoose.Schema({
     offeredSubject: {
         type: String
     },
-    classes:{
+    classes:[{
         type: Schema.Types.ObjectId,
         ref: "addClass"
-    },
+    }],
     attendance:{
         type: Schema.Types.ObjectId,
         ref: "studentAttendance"

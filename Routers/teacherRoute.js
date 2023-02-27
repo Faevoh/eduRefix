@@ -7,9 +7,9 @@ const { addImage } = require("../Controllers/teacherTimeTable");
 
 const Route = express.Router();
 Route.route("/teacher/login").post(teacherLogin); //checked
-// Route.route("/teacher/forgotPassword").post(Forgotpassword);
-// Route.route("/teacher/resetPassword/teacherId").post(resetpassword);
-// Route.route("/teacher/changePassword/:teacherId").patch(changePassword);
+Route.route("/teacher/forgotPassword").post(Forgotpassword); //checked
+Route.route("/teacher/resetPassword/:teacherId").post(resetpassword); //checked
+Route.route("/teacherNewPassword/:teacherId").patch(changePassword); //checked
 Route.route("/teacher/logout/:teacherId").post(teacherLogOut); //checked
 // Route.route("/teacher/timetable/:teacherId").post(addImage)
 
