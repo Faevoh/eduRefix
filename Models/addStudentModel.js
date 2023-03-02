@@ -17,9 +17,6 @@ const addStudent = new mongoose.Schema({
     regNumber: {
         type: String
     },
-    // nameOfClass: {
-    //     type: String
-    // },
     admissionYear: {
         type: String
     },
@@ -46,7 +43,7 @@ const addStudent = new mongoose.Schema({
     },
     result: {
         type: Schema.Types.ObjectId,
-        ref: "Results"
+        ref: "result"
     },
     isStudent: {
         type: Boolean,

@@ -105,6 +105,20 @@ exports.getAllTeachers = async(req,res)=>{
         });
     }
 };
+exports.getOne = async(req,res)=>{
+    try{
+        const teacherid = req.params.teacherid;
+        const singleTeacher = await AddTeacher.findById(teacherid).populate("teacherclass").populate("timetable");
+        res.status(201).json({
+            message: "Single Teacher",
+            data: singleTeacher
+        });    
+    }catch(e){
+        res.status(400).json({
+            message: e.message
+        });
+    }
+};
 exports.AllTeachersperClass = async(req,res)=>{
     try{
         const allTeacher = await AddTeacher.find().populate("teacherclass");

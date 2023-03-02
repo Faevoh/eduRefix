@@ -169,6 +169,20 @@ exports.getAllAdmin = async(req,res)=>{
         });
     }
 };
+exports.getSingleAdmin = async(req,res)=>{
+    try{
+        const adminId = req.params.adminId;
+        const oneAdmin = await AdminSchema.findById(adminId);
+        res.status(201).json({
+            message: "Single Admin",
+            data: oneAdmin
+        });    
+    }catch(e){
+        res.status(400).json({
+            message: e.message
+        });
+    }
+};
 exports.Forgotpassword = async (req, res) => {
     try{
         const {email} = req.body

@@ -2,13 +2,16 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const studentAttendanceSchema = new mongoose.Schema({
-    classTeacher: {
+    subjectTeacher: {
         type: String,
         required: [true, "Teacher's Name is required"]
     },
     attendanceDate: {
         type: Date,
         default: Date.now()
+    },
+    subject: {
+        type: String
     },
     nameOfClass: {
         type: String,

@@ -98,6 +98,20 @@ exports.getAllStudents = async(req,res)=>{
         });
     }
 };
+exports.getSingleStudent = async(req,res)=>{
+    try{
+        const studentid = req.params.studentid
+        const singleStudent = await AddStudent.findById(studentid).populate("classes").populate("timetable").populate("result");
+        res.status(201).json({
+            message: "Single Student",
+            data: singleStudent
+        });    
+    }catch(e){
+        res.status(400).json({
+            message: e.message
+        });
+    }
+};
 exports.AllStudentsperClass = async(req,res)=>{
     try{
         const classNew = req.params.classId;
@@ -121,8 +135,11 @@ exports.deleteStudents = async(req,res)=>{
         await AddStudent.findByIdAndDelete(studentid);
         const theClass = await classModel.findById(classNew);
         await theClass.students.pull(studentid)
+        await theClass.save();
 
-        res.status(200).json({ message: "Student Successfully Deleted"})
+        res.status(200).json({
+             message: "Student Successfully Deleted"
+            })
         
     }catch(e){
         res.status(404).json({

@@ -2,23 +2,26 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema
 
 const ResultSchema = new mongoose.Schema({
-    studentName: [{
+    studentName: {
         type: Schema.Types.ObjectId,
-        ref: "addStudent",
-        required: [true, "Student Name is required" ]
-    }],
+        ref: "addStudent"
+    },
     currentSchoolTerm: {
         type: String,
         required: [true, "Current School Term is required" ]
     },
     resultImage: {
-        type: String,
-        required: [true, "Result Image is required" ]
+        ublic_id: {
+            type: String,
+        },
+        url:{ 
+            type: String,
+        }
     }
 },{
     timestamps: true
 });
 
-const ResultModel = mongoose.model("Results", ResultSchema)
+const ResultModel = mongoose.model("result", ResultSchema)
 
 module.exports = ResultModel

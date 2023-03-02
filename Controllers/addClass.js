@@ -2,8 +2,6 @@ const classModel = require("../Models/classModel");
 const AddStudent = require("../Models/addStudentModel");
 const AddTeacher = require("../Models/addTeacherModel");
 
-
-
 exports.newClass = async(req,res)=>{
     try {
         const data = {nameOfClass,classBranch,monthlyTutionFees} = req.body
@@ -28,7 +26,6 @@ exports.newClass = async(req,res)=>{
         })
     }
 }
-
 exports.allClass = async(req, res)=>{
     try{
         // const addedClass = await classModel.find().populate("addStudent","addTeacher");
@@ -45,7 +42,6 @@ exports.allClass = async(req, res)=>{
         })
     }
 }
-
 exports.oneClass = async(req, res)=>{
     try{
         const id = req.params.classId
@@ -74,7 +70,7 @@ exports.updateClass = async (req,res)=>{
         const updatedClass = await classModel.findByIdAndUpdate(classId,data,{new: true})
         if(!updatedClass ){
             res.status(404).json({
-                message: `User doesnt exist`
+                message: `Class doesnt exist`
             });
         }else{
             res.status(200).json({
