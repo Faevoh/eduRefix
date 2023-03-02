@@ -108,7 +108,7 @@ exports.getAllTeachers = async(req,res)=>{
 exports.getOne = async(req,res)=>{
     try{
         const teacherid = req.params.teacherid;
-        const singleTeacher = await AddTeacher.findById(teacherid).populate("teacherclass").populate("timetable");
+        const singleTeacher = await AddTeacher.findById(teacherid).populate("teacherclass");
         res.status(201).json({
             message: "Single Teacher",
             data: singleTeacher
@@ -224,7 +224,8 @@ exports.changePassword = async(req,res)=>{
 };
 exports.teacherLogOut = async(req,res)=>{
     try{
-        const Teacherlogout = await AddTeacher.findById(req.params.teacherId);
+        const teacherId = req.params.teacherId
+        const Teacherlogout = await AddTeacher.findById(teacherId);
         const myToken = jwt.sign({
             id: Teacherlogout._id,
             password: Teacherlogout.password,
