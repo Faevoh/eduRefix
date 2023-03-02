@@ -34,7 +34,7 @@ Route.route("/admin/alltimetable/student/:userid").get(roleAuth,getAllStudentTim
 
 
 // Route For Teachers with Admin authorization
-Route.route("/admin/teacher/:classId").post(newTeacher); //
+Route.route("/admin/:classId").post(newTeacher); //
 Route.route("/admin/allTeacher/:userid").get(roleAuth,getAllTeachers); //checked
 Route.route("/admin/Teacher/:teacherid").get(getOne); //checked
 Route.route("/admin/allTeachersPerClass/:userid/:classId").get(roleAuth,AllTeachersperClass); //checked
