@@ -33,14 +33,6 @@ const addStudent = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "addClass"
     }],
-    attendance:{
-        type: Schema.Types.ObjectId,
-        ref: "studentAttendance"
-    },
-    timetable:{
-        type: Schema.Types.ObjectId,
-        ref: "StudenttimeTable"
-    },
     result: {
         type: Schema.Types.ObjectId,
         ref: "result"

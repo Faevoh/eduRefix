@@ -38,10 +38,6 @@ const addTeacher = new mongoose.Schema({
     salary: {
         type: String
     },
-    attendance: {
-        type: Schema.Types.ObjectId,
-        ref: "teacherAttendance"
-    },
     isTeacher: {
         type: Boolean,
         default: true
@@ -52,16 +48,6 @@ const addTeacher = new mongoose.Schema({
     teacherclass:{
         type: Schema.Types.ObjectId,
         ref: "addClass"
-    },
-    timetable:{
-        type: Schema.Types.ObjectId,
-        ref: "TeachertimeTable"
-        // public_id: {
-        //     type: String,
-        // },
-        // url:{ 
-        //     type: String,
-        // }
     },
     token: {
         type: String
