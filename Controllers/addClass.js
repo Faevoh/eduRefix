@@ -29,7 +29,7 @@ exports.newClass = async(req,res)=>{
 exports.allClass = async(req, res)=>{
     try{
         // const addedClass = await classModel.find().populate("addStudent","addTeacher");
-        const addedClass = await classModel.find().populate("students","teachers")
+        const addedClass = await classModel.find().populate("students").populate("teachers")
 
             res.status(201).json({
                 classlength: addedClass.length,

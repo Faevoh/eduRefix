@@ -101,7 +101,7 @@ exports.getAllStudents = async(req,res)=>{
 exports.getSingleStudent = async(req,res)=>{
     try{
         const studentid = req.params.studentid
-        const singleStudent = await AddStudent.findById(studentid).populate("classes").populate("timetable").populate("result");
+        const singleStudent = await AddStudent.findById(studentid).populate("classes").populate("result");
         res.status(201).json({
             message: "Single Student",
             data: singleStudent
