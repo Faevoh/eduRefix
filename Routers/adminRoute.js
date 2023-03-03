@@ -1,7 +1,7 @@
 const express = require("express");
 const{newAdmin, confirmVerify,adminLogin, updateProfile,adminLogOut, getAllAdmin,Forgotpassword, resetpassword, changePassword, getSingleAdmin} = require("../Controllers/adminController");
 const{newStudent,getAllStudents, deleteStudents,AllStudentsperClass, updateStudent, getSingleStudent} = require("../Controllers/addStudent");
-const{newClass,allClass, oneClass, updateClass, deleteClass} = require("../Controllers/addClass");
+const{allClass, oneClass, updateClass, deleteClass, createClass} = require("../Controllers/addClass");
 const {newTeacher,getAllTeachers,AllTeachersperClass,deleteTeacher,updateTeacher, getOne} = require("../Controllers/addTeacher")
 const {roleAuth} = require("../Utils/authorization");
 const { getAllTimetable } = require("../Controllers/teacherTimeTable");
@@ -43,11 +43,12 @@ Route.route("/admin/deleteTeacher/:userid/:teacherid/:classId").delete(roleAuth,
 Route.route("/admin/alltimetable/teacher/:userid").get(roleAuth,getAllTimetable); //checked
 
 // Route For Class with Admin authorization
-Route.route("/admin/newClass").post(newClass);  //checked
 Route.route("/admin/allClass/:userid").get(roleAuth, allClass); //checked
 Route.route("/admin/oneClass/:userid/:classId").get(roleAuth, oneClass); //checked
 Route.route("/admin/:userid/class/:classId").patch(roleAuth, updateClass); //checked
 Route.route("/admin/deleteClass/:userid/:classId").delete(roleAuth, deleteClass); //checked
+Route.route("/classNew").post(createClass)
+
 
 
 module.exports = Route

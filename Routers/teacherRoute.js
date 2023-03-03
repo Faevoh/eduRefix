@@ -19,7 +19,7 @@ Route.route("/teacher/result/:teacherid/:studentid").post(uploadResult);
 Route.route("/teacher/allResult").get(getAllResult);
 Route.route("/teacher/:resultid").get(getSingleResult);
 Route.route("/teacher/resultUpdate/:teacherid/:resultid").patch(teacherAuth,updateResult);
-Route.route("/teacher/deleteResult/:teacherid/:studentid/:resultid").delete(teacherAuth,deleteResult)
+Route.route("/teacher/deleteResult/:teacherid/:studentid/:resultid").delete(teacherAuth,deleteResult);
 
 
 module.exports = Route
