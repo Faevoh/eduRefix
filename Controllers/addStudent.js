@@ -42,11 +42,23 @@ exports.newStudent = async(req,res)=>{
             subject: "Welcome, New User",
             message,
         });
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            return re.test(email);
+        }
 
-        res.status(201).json({
-            message: "New Student Added",
+        const isValidEmail = validateEmail(email);
+        if (isValidEmail) {
+         return res.status(201).json({
+            message: "User Created",
             data: createNewUser
-        });
+         })
+        } else {
+            return res.status(400).json({
+                message: 'Email address is invalid',
+                message2: "Could not create User"
+            })
+        }
     }catch(e){
         res.status(400).json({
             message: e.message

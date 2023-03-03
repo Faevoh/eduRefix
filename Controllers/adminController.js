@@ -50,8 +50,7 @@ exports.newAdmin = async(req,res)=>{
         const isValidEmail = validateEmail(email);
         if (isValidEmail) {
          return res.status(200).json({
-            message: 'Email address is valid',
-            message2: "User Created",
+            message: "User Created",
             data: createNewUser
          })
         } else {
