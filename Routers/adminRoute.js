@@ -39,7 +39,7 @@ Route.route("/admin/allTeacher/:userid").get(roleAuth,getAllTeachers); //checked
 Route.route("/admin/Teacher/:teacherid").get(getOne); //checked
 Route.route("/admin/allTeachersPerClass/:userid/:classId").get(roleAuth,AllTeachersperClass); //checked
 Route.route("/teacher/:userid/:teacherId").patch(roleAuth,updateTeacher); //checked
-Route.route("/admin/deleteTeacher/:userid/:teacherid/:classId").delete(roleAuth,deleteTeacher); //checked
+Route.route("/admin/deleteTeacher/:teacherid/:classId").delete(deleteTeacher); //checked
 Route.route("/admin/alltimetable/teacher/:userid").get(roleAuth,getAllTimetable); //checked
 
 // Route For Class with Admin authorization
