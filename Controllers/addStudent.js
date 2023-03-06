@@ -128,7 +128,7 @@ exports.AllStudentsperClass = async(req,res)=>{
     try{
         const classNew = req.params.classId;
         const theClass = await classModel.findById(classNew)
-        const allStudents = await AddStudent.findOne({theClass}).populate("classes");
+        const allStudents = await AddStudent.findOne({theClass}).populate("classes").populate("students");
         res.status(201).json({
             message: "All Students",
             length: allStudents.length,
