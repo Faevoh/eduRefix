@@ -128,11 +128,11 @@ exports.AllStudentsperClass = async(req,res)=>{
     try{
         const classNew = req.params.classId;
         const theClass = await classModel.findById(classNew)
-        const allStudents = await AddStudent.findOne({theClass}).populate("classes").populate("students");
+        const allStudent = await AddStudent.findOne({theClass}).populate("classes").populate("students");
         res.status(201).json({
             message: "All Students",
-            length: allStudents.length,
-            data: allStudents
+            length: allStudent.length,
+            data: allStudent
         });    
     }catch(e){
         res.status(400).json({
