@@ -127,12 +127,12 @@ exports.getSingleStudent = async(req,res)=>{
 exports.AllStudentsperClass = async(req,res)=>{
     try{
         const classNew = req.params.classId;
-        const theClass = await classModel.findById(classNew)
-        const allStudent = await AddStudent.findOne({theClass}).populate("classes").populate("students");
+        const theClass = await classModel.findById(classNew).populate("students")
+        const allStudent = await AddStudent.findOne({theClass}).populate("classes");
         res.status(201).json({
             message: "All Students",
             length: allStudent.length,
-            data: allStudent
+            data: theClass
         });    
     }catch(e){
         res.status(400).json({
