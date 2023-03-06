@@ -10,8 +10,12 @@ const ResultSchema = new mongoose.Schema({
         type: String,
         required: [true, "Current School Term is required" ]
     },
+    currentSchoolYear: {
+        type: String,
+        required: [true, "Current School Term is required" ]
+    },
     resultImage: {
-        ublic_id: {
+        public_id: {
             type: String,
         },
         url:{ 
