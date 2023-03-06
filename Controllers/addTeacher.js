@@ -42,8 +42,7 @@ exports.newTeacher = async(req,res)=>{
         await theClass.save()
 
         // const userVerify = `${req.protocol}://${req.get("host")}/api/verifyStudent/${createNewUser._id}`;
-        const message = `You have been registered as New User in the Eduglobal Application by your Admin .
-        Thank you for registering with our app.`
+        const message = `You have been registered as New User in the Eduglobal Application by your Admin.Thank you for registering with our app.`
         emailSender({
             email: createNewUser.email,
             subject: "Welcome, New User",
