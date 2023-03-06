@@ -39,7 +39,7 @@ exports.newAdmin = async(req,res)=>{
         const message = `Thank you for registering with our app. Please click this link ${pageUrl} to verify your account`
         emailSender({
             email: createNewUser.email,
-            subject: "Verify your account",
+            subject: "Verify your Account",
             message,
         });
         function validateEmail(email) {
